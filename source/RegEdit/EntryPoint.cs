@@ -49,6 +49,9 @@ namespace TP.CS.Registry.RegEdit
             if (args.Length == 0)
             {
                 printUsage();
+
+                Console.ForegroundColor = ConsoleColor.White;
+
                 return;
             }
             for (int i=0;i<args.Length; i+=2)

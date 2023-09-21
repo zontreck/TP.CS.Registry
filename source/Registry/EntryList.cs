@@ -24,6 +24,7 @@ namespace TP.CS.Registry
     {
         public EntryList(string Name)
         {
+            Type = EntryType.Array;
             this.Name = Name;
         }
 
