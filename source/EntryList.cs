@@ -82,6 +82,17 @@ namespace TP.CS.Registry
             }
         }
 
+        public override string PrettyPrint(int indent = 0)
+        {
+            string str = base.PrettyPrint(indent) + " [ {Count} ]\n";
+            foreach(Entry entry in value)
+            {
+                str += entry.PrettyPrint(indent+4) + "\n";
+            }
+
+            return str;
+        }
+
         #endregion
 
 
