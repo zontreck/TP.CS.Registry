@@ -1,0 +1,112 @@
+<Prebuild version="1.10" xmlns="http://dnpb.sourceforge.net/schemas/prebuild-1.10.xsd">
+  <Solution name="TP.CS.Registry" version="1.0" frameworkVersion="net7_0">
+    <Options>
+      <AllowUnsafe>True</AllowUnsafe>
+      <UseRuntimeIdentifier>False</UseRuntimeIdentifier>
+    </Options>
+
+    <Files>
+      <File buildAction="None">setup.cs</File>
+      <File buildAction="None">compile.bat</File>
+      <File buildAction="None">compile.sh</File>
+      <File buildAction="None">runprebuild.bat</File>
+      <File buildAction="None">runprebuild.sh</File>
+    </Files>
+
+    <Configuration name="Debug">
+      <Options>
+
+        <OptimizeCode>false</OptimizeCode>
+        <AllowUnsafe>true</AllowUnsafe>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <NoStdLib>false</NoStdLib>
+        <Prefer32Bit>false</Prefer32Bit>
+        <DebugInformation>true</DebugInformation>
+      </Options>
+    </Configuration>
+    <Configuration name="Release">
+      <Options>
+
+        <OptimizeCode>true</OptimizeCode>
+        <AllowUnsafe>true</AllowUnsafe>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <NoStdLib>false</NoStdLib>
+        <Prefer32Bit>false</Prefer32Bit>
+        <DebugInformation>false</DebugInformation>
+      </Options>
+    </Configuration>
+
+    <Project name="TP.CS.EventsBus" path="TP.CS.EventsBus/source" type="Library">
+      <Configuration name="Debug">
+        <Options>
+          <OptimizeCode>False</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../../bin/debug</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OptimizeCode>True</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../../bin/release</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+
+    </Project>
+
+    <Project name="TP.CS.Registry" path="source" type="Library">
+      <Configuration name="Debug">
+        <Options>
+
+          <OptimizeCode>False</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../bin/debug</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+
+          <OptimizeCode>True</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../bin/release</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+
+
+      <Reference name="TP.CS.EventsBus" />
+      <PackageReference name="Newtonsoft.Json" version="13.0.3" />
+
+
+      <Files>
+        <File buildAction="None" copyToOutput="PreserveNewest">HSRD\HSRD.ico</File>
+        <File buildAction="None" copyToOutput="PreserveNewest">HSRD\HSRD_Icon.png</File>
+      </Files>
+
+      <TextGen name="Constants.json" output="Constants.cs" tool="Bottle" />
+    </Project>
+
+
+  </Solution>
+</Prebuild>
