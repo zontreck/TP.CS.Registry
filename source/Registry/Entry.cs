@@ -304,6 +304,11 @@ namespace TP.CS.Registry
                         x = new EntryList<Entry>(Name);
                         break;
                     }
+                case EntryType.WordArray:
+                    {
+                        x = new WordList(Name);
+                        break;
+                    }
                 default:
                     {
                         x = new BlankEntry(Name);
@@ -365,6 +370,11 @@ namespace TP.CS.Registry
         public EntryList<T> Array<T>() where T : Entry
         {
             return (EntryList<T>)this;
+        }
+
+        public WordList WordList()
+        {
+            return (WordList)this;
         }
 
         /// <summary>

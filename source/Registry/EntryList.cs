@@ -26,6 +26,7 @@ namespace TP.CS.Registry
         {
             Type = EntryType.Array;
             this.Name = Name;
+            Description = "Array";
         }
 
         #region Entry List Elements

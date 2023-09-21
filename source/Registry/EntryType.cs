@@ -18,6 +18,8 @@ namespace TP.CS.Registry
         
         Key,    // Contains children, similar to a Dictionary
         Root,    // Contains Children - Is key but with nullable parent
-        Array   // Non-Named Entry List. This is not a Key.
+        Array,   // Non-Named Entry List. This is not a Key. (DEPRECATED)
+
+        WordArray
     }
 }

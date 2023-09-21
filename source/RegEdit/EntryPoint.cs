@@ -161,6 +161,11 @@ namespace TP.CS.Registry.RegEdit
                                         value = byte.Parse(args[i + 4]);
                                         break;
                                     }
+                                case "entrylist":
+                                    {
+                                        x = new EntryList<Entry>(name);
+                                        break;
+                                    }
                                 default:
                                     {
                                         Console.WriteLine($"ERROR: Node type ({type}) is unsupported, or maybe there was a typo. Path ({path}) not created.");

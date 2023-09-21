@@ -55,6 +55,11 @@ namespace TP.CS.Registry.RegRead
                             Console.Write(en.Bool().Value);
                             break;
                         }
+                    case EntryType.Byte:
+                        {
+                            Console.Write(en.Byte().Value);
+                            break;
+                        }
                 }
             }
 
