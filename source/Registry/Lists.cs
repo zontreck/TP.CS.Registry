@@ -53,7 +53,7 @@ namespace TP.CS.Registry
             str += ind + "{\n";
             foreach(var item in Value)
             {
-                str += ind + $"\"{item}\",";
+                str += ind + $"\"{item}\",\n";
             }
             str = str.Trim().Trim(',');
             str += "\n" + ind + "}";
