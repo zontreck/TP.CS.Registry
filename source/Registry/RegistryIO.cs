@@ -9,7 +9,7 @@ namespace TP.CS.Registry
     public class RegistryIO
     {
         public const byte Version = 2;
-        public const byte Version2 = 0;
+        public const byte Version2 = 1;
         /// <summary>
         /// Saves the entire Registry to disk
         /// 
