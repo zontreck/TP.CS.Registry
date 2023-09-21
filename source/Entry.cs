@@ -235,18 +235,27 @@ namespace TP.CS.Registry
 
         public virtual void Write(BinaryWriter stream)
         {
+            if (Parent is EntryList<Entry>) return;
+
             stream.Write((byte)Type);
             stream.Write(Name);
             stream.Write(Description);
 
         }
 
-        public static Entry? Read(BinaryReader stream)
+        public static Entry? Read(BinaryReader stream, bool isList=false, EntryType listType = EntryType.Empty)
         {
             Entry x = null;
-            var Type = (EntryType)stream.ReadByte();
-            var Name = stream.ReadString();
-            var Description = stream.ReadString();
+            EntryType Type = listType;
+            string Name = "";
+            string Description = "";
+            if (!isList)
+            {
+                Type = (EntryType)stream.ReadByte();
+                Name = stream.ReadString();
+                Description = stream.ReadString();
+
+            }
 
             switch(Type)
             {
@@ -288,6 +297,11 @@ namespace TP.CS.Registry
                 case EntryType.Root:
                     {
                         x = new Key("root");
+                        break;
+                    }
+                case EntryType.Array:
+                    {
+                        x = new EntryList<Entry>(Name);
                         break;
                     }
                 default:
@@ -346,6 +360,11 @@ namespace TP.CS.Registry
         public VByte Byte()
         {
             return (VByte)this;
+        }
+
+        public EntryList<T> Array<T>() where T : Entry
+        {
+            return (EntryList<T>)this;
         }
 
         /// <summary>
