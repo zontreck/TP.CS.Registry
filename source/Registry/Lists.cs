@@ -47,7 +47,7 @@ namespace TP.CS.Registry
             string str = base.PrettyPrint(indent);
 
             // Print the entire list
-            str += $" [{Value.Count}] ";
+            str += $" [{Value.Count}] \n";
             string ind = "".PadLeft(indent+4, ' ');
 
             str += ind + "{\n";
