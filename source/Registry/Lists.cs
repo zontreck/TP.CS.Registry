@@ -55,7 +55,7 @@ namespace TP.CS.Registry
             {
                 str += ind + $"\"{item}\",\n";
             }
-            str = str.Trim().Trim(',');
+            str = str.TrimEnd().TrimEnd(',');
             str += "\n" + ind + "}";
 
             return str;
