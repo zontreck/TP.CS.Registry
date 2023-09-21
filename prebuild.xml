@@ -66,14 +66,14 @@
 
     </Project>
 
-    <Project name="TP.CS.Registry" path="source" type="Library">
+    <Project name="TP.CS.Registry" path="source/Registry" type="Library">
       <Configuration name="Debug">
         <Options>
 
           <OptimizeCode>False</OptimizeCode>
           <EnableDefaultItems>True</EnableDefaultItems>
           <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
-          <OutputPath>../bin/debug</OutputPath>
+          <OutputPath>../../bin/debug</OutputPath>
           <UseDependencyFile>False</UseDependencyFile>
           <SelfContained>False</SelfContained>
           <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
@@ -86,7 +86,7 @@
           <OptimizeCode>True</OptimizeCode>
           <EnableDefaultItems>True</EnableDefaultItems>
           <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
-          <OutputPath>../bin/release</OutputPath>
+          <OutputPath>../../bin/release</OutputPath>
           <UseDependencyFile>False</UseDependencyFile>
           <SelfContained>False</SelfContained>
           <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
@@ -108,5 +108,127 @@
     </Project>
 
 
+    <Project name="RegEdit" path="source\RegEdit" type="Exe"
+      icon="Tool.ico">
+
+      <Author>Tara Piccari (tarapiccari@gmail.com)</Author>
+      <Nullable />
+      <Configuration name="Debug">
+        <Options>
+          <OptimizeCode>False</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../../bin/debug</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OptimizeCode>True</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../../bin/release</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+
+      <Reference name="TP.CS.Registry" />
+      <Reference name="TP.CS.Registry.FontHelper" />
+
+      <TextGen sourceInSolution="true" name="GitVersion.sw" output="Versions.cs">
+        <Reference name="System" />
+        <Reference name="System.Diagnostics" />
+        <Reference name="System.IO" />
+        <Reference name="System.Diagnostics.Process" version="7.0.0.0" />
+        <Reference name="System.Reflection" />
+      </TextGen>
+    </Project>
+
+    <Project name="RegRead" path="source\RegRead" type="Exe"
+      icon="Tool.ico">
+
+      <Author>Tara Piccari (tarapiccari@gmail.com)</Author>
+      <Nullable />
+      <Configuration name="Debug">
+        <Options>
+          <OptimizeCode>False</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../../bin/debug</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OptimizeCode>True</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../../bin/release</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+
+      <Reference name="TP.CS.Registry" />
+      <PackageReference name="Newtonsoft.Json" version="13.0.3" />
+
+      <TextGen sourceInSolution="true" name="GitVersion.sw" output="Versions.cs">
+        <Reference name="System" />
+        <Reference name="System.Diagnostics" />
+        <Reference name="System.IO" />
+        <Reference name="System.Diagnostics.Process" version="7.0.0.0" />
+        <Reference name="System.Reflection" />
+      </TextGen>
+    </Project>
+
+    <Project name="TP.CS.Registry.FontHelper" path="source\FontHelper" type="Exe">
+      <Author>Tara Piccari (tarapiccari@gmail.com)</Author>
+      <Configuration name="Debug">
+        <Options>
+          <OptimizeCode>False</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../../bin/debug</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+      <Configuration name="Release">
+        <Options>
+          <OptimizeCode>True</OptimizeCode>
+          <EnableDefaultItems>True</EnableDefaultItems>
+          <UseCommonOutputDirectory>False</UseCommonOutputDirectory>
+          <OutputPath>../../bin/release</OutputPath>
+          <UseDependencyFile>False</UseDependencyFile>
+          <SelfContained>False</SelfContained>
+          <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
+          <AppendRuntimeIdentifierToOutputPath>False</AppendRuntimeIdentifierToOutputPath>
+        </Options>
+      </Configuration>
+
+      <PackageReference name="Figgle" version="0.5.1" />
+      <Reference name="TP.CS.EventsBus" />
+
+      <TextGen sourceInSolution="true" name="GitVersion.sw" output="Versions.cs">
+        <Reference name="System" />
+        <Reference name="System.Diagnostics" />
+        <Reference name="System.IO" />
+        <Reference name="System.Diagnostics.Process" version="7.0.0.0" />
+        <Reference name="System.Reflection" />
+      </TextGen>
+    </Project>
   </Solution>
 </Prebuild>
