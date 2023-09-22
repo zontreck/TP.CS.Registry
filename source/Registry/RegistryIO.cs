@@ -97,6 +97,29 @@ namespace TP.CS.Registry
                 Console.WriteLine("Registry Saved");
         }
 
+        public static byte[] saveWithoutHeader (Key root)
+        {
+            MemoryStream ms = new MemoryStream();
+
+            using (BinaryWriter bw = new BinaryWriter(ms))
+            {
+                root.Write(bw);
+            }
+
+            return ms.ToArray();
+        }
+
+        public static Key loadWithoutHeader(byte[] bytes)
+        {
+            MemoryStream ms = new MemoryStream(bytes);
+
+            using (BinaryReader br = new BinaryReader(ms))
+            {
+                return Entry.Read(br).Key();
+            }
+
+        }
+
         public static byte[] getBytes(Key root)
         {
             using (MemoryStream ms = new MemoryStream())
