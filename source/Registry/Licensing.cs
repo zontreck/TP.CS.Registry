@@ -19,7 +19,8 @@ namespace TP.CS.Registry
             Unknown,
             Customer,
             Support,
-            Patron
+            Patron,
+            Developer
         }
 
         /// <summary>
