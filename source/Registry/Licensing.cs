@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -13,16 +14,14 @@ namespace TP.CS.Registry
     {
         public enum KeyType : byte
         {
+            Unknown,
             Customer,
             Support,
             Patron
         }
-        private Key element = new Key("key")
-        {
-            Type = EntryType.Root
-        };
 
-        public int Expiry = -1;
+        public string Date = "09/21/2023";
+        public short Expiry = -1;
         public KeyType TypeOfKey = KeyType.Customer;
         public string Name = "No Name";
         public bool B64 = false;
@@ -30,17 +29,32 @@ namespace TP.CS.Registry
         public Licensing()
         {
             Expiry = 365;
-            
+            Date = DateTime.Now.ToString("MM/dd/YYYY");
         }
 
-        public Licensing(string Keyx)
+        public bool Expired()
         {
-            byte[] arr = Convert.FromHexString(Keyx);
+            return DateTime.Parse(Date).AddDays(Expiry) >= DateTime.Now;
+        }
 
-            element = RegistryIO.loadWithoutHeader(arr);
-            Expiry = element.getNamed("X").Int32().Value;
-            TypeOfKey = (KeyType)element.getNamed("T").Byte().Value;
-            Name = element.getNamed("N").Word().Value;
+        public Licensing(string Keyx, bool b64)
+        {
+            byte[] arr = null;
+            
+            if(b64) arr = Convert.FromBase64String(Keyx);
+            else arr = Convert.FromHexString(Keyx);
+
+
+            using(MemoryStream ms = new MemoryStream(arr))
+            {
+                using(BinaryReader br = new BinaryReader(ms))
+                {
+                    TypeOfKey = (KeyType)br.ReadByte();
+                    Name = br.ReadString();
+                    Expiry = br.ReadInt16();
+                    Date = br.ReadString();
+                }
+            }
         }
 
         public byte[] MakeKey()
@@ -54,6 +68,7 @@ namespace TP.CS.Registry
                     bw.Write((byte)TypeOfKey);
                     bw.Write(Name);
                     bw.Write(Expiry);
+                    bw.Write(Date);
                 }
 
                 res=ms.ToArray();
@@ -88,18 +103,16 @@ namespace TP.CS.Registry
         public string FormatKey(string input)
         {
             return $"" +
-                $"{input.Substring(0, 4)}" +
+                $"{input.Substring(0, 6)}" +
                 $"-" +
-                $"{input.Substring(5, 4)}" +
+                $"{input.Substring(7, 3)}" +
                 $"-" +
-                $"{input.Substring(9, 6)}" +
-                $"-" +
-                $"{input.Substring(15)}";
+                $"{input.Substring(10)}";
         }
 
         public override string ToString()
         {
-            return (ToStringKey(MakeKey()));
+            return FormatKey(ToStringKey(MakeKey()));
         }
     }
 }
