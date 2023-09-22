@@ -35,6 +35,7 @@ namespace TP.CS.Registry
                 {
                     writeHeaderV2(bw);
 
+                    Entry.ROOT.setRoot(Entry.ROOT);
                     Entry.ROOT.Write(bw);
                 }
             }
@@ -69,7 +70,7 @@ namespace TP.CS.Registry
                 {
                     writeHeaderV2(bw);
 
-
+                    root.setRoot(root);
                     root.Write(bw);
                 }
             }
@@ -91,6 +92,7 @@ namespace TP.CS.Registry
             {
                 writeHeaderV2(bw);
 
+                root.setRoot(root);
                 root.Write(bw);
             }
             if (!EventBus.debug)
