@@ -34,6 +34,7 @@ namespace TP.CS.Registry
 
         public bool Expired()
         {
+            if (Expiry == -1) return false;
             return DateTime.Parse(Date).AddDays(Expiry) >= DateTime.Now;
         }
 
