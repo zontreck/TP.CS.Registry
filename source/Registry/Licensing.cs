@@ -59,12 +59,12 @@ namespace TP.CS.Registry
                 using(BinaryReader br = new BinaryReader(ms))
                 {
                     TypeOfKey = (KeyType)br.ReadByte();
+                    Day = br.ReadByte();
                     Name = br.ReadString();
+                    Month = br.ReadByte();
                     Expiry = br.ReadInt16();
 
                     Year = br.ReadInt16();
-                    Month = br.ReadByte();
-                    Day = br.ReadByte();
                 }
             }
         }
@@ -78,12 +78,12 @@ namespace TP.CS.Registry
                 {
 
                     bw.Write((byte)TypeOfKey);
+                    bw.Write(Day);
                     bw.Write(Name);
+                    bw.Write(Month);
                     bw.Write(Expiry);
 
                     bw.Write(Year);
-                    bw.Write(Month);
-                    bw.Write(Day);
                 }
 
                 res=ms.ToArray();
