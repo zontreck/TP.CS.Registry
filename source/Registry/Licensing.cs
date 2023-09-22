@@ -5,6 +5,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +21,16 @@ namespace TP.CS.Registry
             Support,
             Patron
         }
+
+        /// <summary>
+        /// ByteWave - Aria's Creations 
+        /// 
+        /// Data Offset
+        /// </summary>
+        public const int BWACOffset = 0x0115044;
+        public const int BWACOffset2 = 0x61726109;
+        public const int BWACOffset3 = 0xFFFF;
+        public const int BWACOffset4 = 0xE707;
 
         public short Year;
         public byte Month;
@@ -56,13 +68,29 @@ namespace TP.CS.Registry
 
         public Licensing(string Keyx, bool b64)
         {
+            char[] chars = Keyx.ToCharArray();
+            
+            Keyx = $"" +
+                $"{string.Join("",chars.Take(6))}" +
+                $"{string.Join("", chars.Skip(6+1).Take(4))}" +
+                $"{string.Join("", chars.Skip(6+1).Skip(4+1).Take(6))}" +
+                $"{string.Join("", chars.Skip(6+1).Skip(4+1).Skip(6+1))}";
+
             byte[] arr = null;
             
             if(b64) arr = Convert.FromBase64String(Keyx);
             else arr = Convert.FromHexString(Keyx);
 
+            BigInteger bi = new BigInteger(arr);
 
-            using(MemoryStream ms = new MemoryStream(arr))
+            bi += BWACOffset;
+            bi -= BWACOffset2;
+            bi += BWACOffset3;
+            bi += BWACOffset4;
+
+            arr = bi.ToByteArray();
+
+            using (MemoryStream ms = new MemoryStream(arr))
             {
                 using(BinaryReader br = new BinaryReader(ms))
                 {
@@ -96,10 +124,14 @@ namespace TP.CS.Registry
 
                 res=ms.ToArray();
             }
-
+            BigInteger bi = new BigInteger(res);
+            bi -= BWACOffset;
+            bi += BWACOffset2;
+            bi -= BWACOffset3;
+            bi -= BWACOffset4;
 
             //byte[] arr = RegistryIO.saveWithoutHeader(element);
-            return res;
+            return bi.ToByteArray();
         }
 
         public byte[] CompressKey(byte[] rawKey)
@@ -125,12 +157,15 @@ namespace TP.CS.Registry
 
         public string FormatKey(string input)
         {
+            char[] chars = input.ToCharArray();
             return $"" +
-                $"{input.Substring(0, 6)}" +
+                $"{string.Join("", chars.Take(6))}" +
                 $"-" +
-                $"{input.Substring(7, 3)}" +
+                $"{string.Join("", chars.Skip(6).Take(4))}" +
                 $"-" +
-                $"{input.Substring(10)}";
+                $"{string.Join("", chars.Skip(6).Skip(4).Take(6))}" +
+                $"-" +
+                $"{string.Join("", chars.Skip(6).Skip(4).Skip(6))}";
         }
 
         public override string ToString()
