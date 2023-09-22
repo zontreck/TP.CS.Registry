@@ -181,8 +181,9 @@ namespace TP.CS.Registry
             int count = stream.ReadInt32();
             for(var i = 0; i < count; i++)
             {
-                var x = Read(stream);
+                var x = Read(stream, MyRoot);
                 x.Parent = this;
+                x.MyRoot = MyRoot;
                 Add(x);
             }
         }

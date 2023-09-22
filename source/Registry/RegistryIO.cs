@@ -9,7 +9,7 @@ namespace TP.CS.Registry
     public class RegistryIO
     {
         public const byte Version = 2;
-        public const byte Version2 = 1;
+        public const byte Version2 = 4;
         /// <summary>
         /// Saves the entire Registry to disk
         /// 
@@ -115,7 +115,7 @@ namespace TP.CS.Registry
 
             using (BinaryReader br = new BinaryReader(ms))
             {
-                return Entry.Read(br).Key();
+                return Entry.Read(br, null).Key();
             }
 
         }
@@ -144,7 +144,7 @@ namespace TP.CS.Registry
         private static void writeHeaderV1(BinaryWriter bw)
         {
             // Write out header!
-            bw.Write(1);
+            bw.Write((byte)1);
             bw.Write(Version2); // 2
             bw.Write(Embed.Creator); // 1 + 12
             bw.Write(new byte[16]); // 16
@@ -166,7 +166,7 @@ namespace TP.CS.Registry
 
             using (BinaryWriter writer = new BinaryWriter(MS))
             {
-                writer.Write(2);
+                writer.Write((byte)2);
                 writer.Write(Version2);
                 writer.Write(Embed.Extension);
                 writer.Write(Embed.Creator);
@@ -215,7 +215,7 @@ namespace TP.CS.Registry
                                 }
                         }
 
-                        Entry.ROOT.replaceEntries(Entry.Read(br));
+                        Entry.ROOT.replaceEntries(Entry.Read(br, null));
                     }
                 }
             }
@@ -241,6 +241,7 @@ namespace TP.CS.Registry
             br.ReadBytes(16);
         }
 
+        private static bool skipEncodeDescription = false;
         private static void readHeaderV2(BinaryReader br)
         {
             byte[] header = br.ReadBytes(127); // First byte was read already.
@@ -248,9 +249,17 @@ namespace TP.CS.Registry
             {
                 using (BinaryReader reader = new BinaryReader(ms))
                 {
-                    byte v2 = reader.ReadByte();
+                    byte v2 = header[0];
                     switch (v2)
                     {
+                        case 0:
+                        case 1:
+                        case 2:
+                            {
+                                // V2.3 wont skip the encoded description once the version is appropriately bumped.
+                                skipEncodeDescription = true;
+                                break;
+                            }
                         default:
                             {
                                 break;
@@ -295,12 +304,13 @@ namespace TP.CS.Registry
                                 }
                         }
 
-                        x.replaceEntries(Entry.Read(br));
+                        x.replaceEntries(Entry.Read(br, null, skipEncDesc : (skipEncodeDescription ? true : false)));
                     }
                 }
             }
 
             x.setRoot(x);
+            skipEncodeDescription = false;
 
             return x;
         }
@@ -333,10 +343,11 @@ namespace TP.CS.Registry
                         }
                 }
 
-                x.replaceEntries(Entry.Read(br));
+                x.replaceEntries(Entry.Read(br, null, skipEncDesc: (skipEncodeDescription ? true : false)));
             }
 
             x.setRoot(x);
+            skipEncodeDescription = false;
 
             return x;
         }

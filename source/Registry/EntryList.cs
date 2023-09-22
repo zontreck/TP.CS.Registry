@@ -46,7 +46,7 @@ namespace TP.CS.Registry
             int count = stream.ReadInt32();
             for(int i = 0; i < count; i++)
             {
-                Entry subEntry = Read(stream, true, type);
+                Entry subEntry = Read(stream, MyRoot, true, type);
 
                 value.Add((T)subEntry);
                 subEntry.Parent = this;

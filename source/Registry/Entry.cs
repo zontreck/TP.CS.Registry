@@ -19,6 +19,11 @@ namespace TP.CS.Registry
         public string Name { get; set; } = "(noname)";
 
         /// <summary>
+        /// This flag controls whether the description value gets encoded for all child items. It can only be set on the root.
+        /// </summary>
+        public bool EncodeDescription { get; set; } = true;
+
+        /// <summary>
         /// Entry Common Name
         /// 
         /// This may be used for friendlier display of a Entry Name
@@ -236,24 +241,50 @@ namespace TP.CS.Registry
         public virtual void Write(BinaryWriter stream)
         {
             if (Parent is EntryList<Entry>) return;
-
+            
             stream.Write((byte)Type);
             stream.Write(Name);
-            stream.Write(Description);
+
+            if (Type == EntryType.Root)
+            {
+                stream.Write(EncodeDescription);
+            }
+            if(encodesDescription())
+                stream.Write(Description);
 
         }
 
-        public static Entry? Read(BinaryReader stream, bool isList=false, EntryType listType = EntryType.Empty)
+        public bool encodesDescription()
+        {
+            return MyRoot.EncodeDescription;
+        }
+
+        public static Entry? Read(BinaryReader stream, Key root, bool isList=false, EntryType listType = EntryType.Empty, bool skipEncDesc = false)
         {
             Entry x = null;
             EntryType Type = listType;
             string Name = "";
             string Description = "";
+            bool EncodeDesc=true;
             if (!isList)
             {
                 Type = (EntryType)stream.ReadByte();
                 Name = stream.ReadString();
-                Description = stream.ReadString();
+                if(Type == EntryType.Root && !skipEncDesc)
+                {
+                    EncodeDesc = stream.ReadBoolean();
+                }
+                if (skipEncDesc)
+                {
+                    EncodeDesc = true;
+                }
+                if(root == null)
+                {
+                    if(EncodeDesc) Description = stream.ReadString();
+                }
+                if(root != null && root.EncodeDescription)
+                    Description = stream.ReadString();
+
 
             }
 
@@ -317,7 +348,13 @@ namespace TP.CS.Registry
             }
             x.Type = Type;
             x.Description = Description;
+            x.EncodeDescription = EncodeDesc;
             x.Parent = null;
+
+            if(x.Type == EntryType.Root)
+            {
+                x.MyRoot = x.Key();
+            }
 
             x.readValue(stream);
             

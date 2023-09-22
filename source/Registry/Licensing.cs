@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -22,7 +24,8 @@ namespace TP.CS.Registry
 
         public int Expiry = -1;
         public KeyType TypeOfKey = KeyType.Customer;
-        public string Name;
+        public string Name = "No Name";
+        public bool B64 = false;
 
         public Licensing()
         {
@@ -40,26 +43,63 @@ namespace TP.CS.Registry
             Name = element.getNamed("N").Word().Value;
         }
 
-        public string MakeKey()
+        public byte[] MakeKey()
         {
-            element = new Key("key")
+            byte[] res = null;
+            using (MemoryStream ms = new MemoryStream())
             {
-                Type = EntryType.Root
-            };
+                using (BinaryWriter bw = new BinaryWriter(ms))
+                {
 
-            element.Add(new VInt32("X", Expiry));
-            element.Add(new Word("N", Name));
-            element.Add(new VByte("T", (byte)TypeOfKey));
-            
+                    bw.Write((byte)TypeOfKey);
+                    bw.Write(Name);
+                    bw.Write(Expiry);
+                }
 
-            byte[] arr = RegistryIO.saveWithoutHeader(element);
+                res=ms.ToArray();
+            }
 
-            return Convert.ToHexString(arr);
+
+            //byte[] arr = RegistryIO.saveWithoutHeader(element);
+            return res;
+        }
+
+        public byte[] CompressKey(byte[] rawKey)
+        {
+            using(MemoryStream ms = new MemoryStream())
+            {
+                using(GZipStream gz = new GZipStream(ms, CompressionMode.Compress, false))
+                {
+                    byte[] current = ms.ToArray();
+                    gz.Write(rawKey, 0, rawKey.Length);
+
+                }
+
+                return ms.ToArray();
+            }
+        }
+
+        public string ToStringKey(byte[] kx)
+        {
+            if (B64) return Convert.ToBase64String(kx);
+            else return Convert.ToHexString(kx);
+        }
+
+        public string FormatKey(string input)
+        {
+            return $"" +
+                $"{input.Substring(0, 4)}" +
+                $"-" +
+                $"{input.Substring(5, 4)}" +
+                $"-" +
+                $"{input.Substring(9, 6)}" +
+                $"-" +
+                $"{input.Substring(15)}";
         }
 
         public override string ToString()
         {
-            return MakeKey();
+            return (ToStringKey(MakeKey()));
         }
     }
 }
