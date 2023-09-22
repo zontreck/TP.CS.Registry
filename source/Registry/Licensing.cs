@@ -46,6 +46,14 @@ namespace TP.CS.Registry
             return dt.AddDays(Expiry) >= DateTime.Now;
         }
 
+        public int RemainingDays()
+        {
+            DateTime dt = new DateTime(Year, Month, Day);
+
+            dt.AddDays(Expiry);
+            return dt.Subtract(DateTime.Now).Days;
+        }
+
         public Licensing(string Keyx, bool b64)
         {
             byte[] arr = null;
