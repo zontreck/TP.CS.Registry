@@ -20,7 +20,10 @@ namespace TP.CS.Registry
             Patron
         }
 
-        public string Date = "09/21/2023";
+        public short Year;
+        public byte Month;
+        public byte Day;
+
         public short Expiry = -1;
         public KeyType TypeOfKey = KeyType.Customer;
         public string Name = "No Name";
@@ -29,13 +32,18 @@ namespace TP.CS.Registry
         public Licensing()
         {
             Expiry = 365;
-            Date = DateTime.Now.ToString("MM/dd/YYYY");
+            DateTime dt = DateTime.Now;
+
+            Year = (short)dt.Year;
+            Month = (byte)dt.Month;
+            Day = (byte)dt.Day;
         }
 
         public bool Expired()
         {
             if (Expiry == -1) return false;
-            return DateTime.Parse(Date).AddDays(Expiry) >= DateTime.Now;
+            DateTime dt = new DateTime(Year, Month, Day);
+            return dt.AddDays(Expiry) >= DateTime.Now;
         }
 
         public Licensing(string Keyx, bool b64)
@@ -53,7 +61,10 @@ namespace TP.CS.Registry
                     TypeOfKey = (KeyType)br.ReadByte();
                     Name = br.ReadString();
                     Expiry = br.ReadInt16();
-                    Date = br.ReadString();
+
+                    Year = br.ReadInt16();
+                    Month = br.ReadByte();
+                    Day = br.ReadByte();
                 }
             }
         }
@@ -69,7 +80,10 @@ namespace TP.CS.Registry
                     bw.Write((byte)TypeOfKey);
                     bw.Write(Name);
                     bw.Write(Expiry);
-                    bw.Write(Date);
+
+                    bw.Write(Year);
+                    bw.Write(Month);
+                    bw.Write(Day);
                 }
 
                 res=ms.ToArray();
