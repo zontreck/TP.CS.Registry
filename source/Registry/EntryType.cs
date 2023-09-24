@@ -20,6 +20,7 @@ namespace TP.CS.Registry
         Root,    // Contains Children - Is key but with nullable parent
         Array,   // Non-Named Entry List. This is not a Key. (DEPRECATED)
 
-        WordArray
+        WordArray,
+        ByteArray
     }
 }

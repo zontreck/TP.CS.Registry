@@ -404,14 +404,14 @@ namespace TP.CS.Registry
             return (VByte)this;
         }
 
-        public EntryList<T> Array<T>() where T : Entry
-        {
-            return (EntryList<T>)this;
-        }
-
         public WordList WordList()
         {
             return (WordList)this;
+        }
+
+        public ByteList ByteList()
+        {
+            return (ByteList)this;
         }
 
         /// <summary>
