@@ -5,7 +5,8 @@
       "Creator": "Tara Piccari",
       "DefaultFileName": "registry",
       "Extension": "hsrd",
-      "RegistryFolder":  "registry"
+      "RegistryFolder": "registry",
+      "HSRDGlobalStorage":  "HSRDStore"
     }
   }
 }

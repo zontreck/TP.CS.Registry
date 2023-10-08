@@ -2,7 +2,8 @@
 using TP.CS.EventsBus.Events;
 using System;
 using System.IO;
-
+using System.Reflection;
+using System.IO.Enumeration;
 
 namespace TP.CS.Registry
 {
@@ -10,15 +11,38 @@ namespace TP.CS.Registry
     {
         public const byte Version = 2;
         public const byte Version2 = 4;
+
+        public static string GetRegistryGlobalPath(string name, string database)
+        {
+            string filename = name;
+
+            // Create a registry folder in the user profile
+            string globalAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            globalAppData = Path.Combine(globalAppData, Embed.HSRDGlobalStorage);
+            if (!Directory.Exists(globalAppData)) Directory.CreateDirectory(globalAppData);
+            globalAppData = Path.Combine(globalAppData, database);
+            if (!Directory.Exists(globalAppData)) Directory.CreateDirectory(globalAppData);
+
+            filename = Path.Combine(globalAppData, filename);
+            filename = Path.ChangeExtension(filename, HSRDExtension);
+            return filename;
+        }
+
         /// <summary>
         /// Saves the entire Registry to disk
         /// 
         /// This uses the Entry.ROOT object. To use another registry, see the saveHive function.
         /// </summary>
-        public static void save()
+        public static void save(string database = "%nset")
         {
-            string filename = Path.Combine(DataFolder, RootHSRD);
-            filename = Path.ChangeExtension(filename, HSRDExtension);
+            if(database == "%nset")
+            {
+                database = Assembly.GetExecutingAssembly().GetName().Name;
+                if (database == null) database = "Global";
+                
+            }
+            string filename = GetRegistryGlobalPath(RootHSRD, database);
+            
 
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine($"Saving Registry : \n\nByte Count: {getBytes(Entry.ROOT).Length}\n{Entry.ROOT.PrettyPrint()}");
@@ -27,7 +51,6 @@ namespace TP.CS.Registry
 
 
             // Reset the file to zero bytes if it exists
-            ensureFolder();
             resetFile(filename);
             using(FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
             {
@@ -49,10 +72,18 @@ namespace TP.CS.Registry
         /// This requires a file name!
         /// </summary>
         /// <param name="root"></param>
-        public static void saveHive(Key root, string name)
+        public static void saveHive(Key root, string name, string database = "%nset")
         {
-            string filename = Path.ChangeExtension(name, HSRDExtension);
-            filename = Path.Combine(DataFolder, filename);
+
+            if (database == "%nset")
+            {
+                database = Assembly.GetExecutingAssembly().GetName().Name;
+                if (database == null) database = "Global";
+
+            }
+            string filename = GetRegistryGlobalPath(name, database);
+
+
             Console.ForegroundColor = ConsoleColor.DarkRed;
 
             if(!EventBus.debug)
@@ -61,7 +92,6 @@ namespace TP.CS.Registry
             Console.ForegroundColor = ConsoleColor.DarkGreen;
 
             // Reset the file to zero bytes if it exists
-            ensureFolder();
             resetFile(filename);
 
             using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
@@ -185,13 +215,20 @@ namespace TP.CS.Registry
         /// <summary>
         /// Loads the Root Hive into memory
         /// </summary>
-        public static void load()
+        public static void load(string database = "%nset")
         {
 
             string filename = Path.Combine(DataFolder, RootHSRD);
             filename = Path.ChangeExtension(filename, HSRDExtension);
 
-            ensureFolder();
+            if(File.Exists(filename))
+            {
+                // Migrate to new location
+                File.Move(filename, GetRegistryGlobalPath(RootHSRD, database));
+            }
+
+            filename = GetRegistryGlobalPath(RootHSRD, database);
+
 
             Entry.ROOT.Type = EntryType.Root;
             if (File.Exists(filename))
@@ -274,13 +311,19 @@ namespace TP.CS.Registry
         /// <summary>
         /// Loads the specified custom Hive into memory
         /// </summary>
-        public static Key loadHive(string name)
+        public static Key loadHive(string name, string database = "%nset")
         {
 
             string filename = Path.Combine(DataFolder, name);
             filename = Path.ChangeExtension(filename, HSRDExtension);
 
-            ensureFolder();
+            if (File.Exists(filename))
+            {
+                File.Move(filename, GetRegistryGlobalPath(name, database));
+            }
+            filename = GetRegistryGlobalPath(name, database);
+
+
             Key x = new Key("root");
             x.Type = EntryType.Root;
             if (File.Exists(filename))
